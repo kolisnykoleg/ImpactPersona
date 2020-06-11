@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="Page-contentCheckout g-b fb1/1 fb1/2@l">
-                    <form class="Checkout" method="post" action="" novalidate>
+                    <form class="Checkout" method="post" action="/checkout/purchase" novalidate>
                         <div class="Checkout-block mb-xl">
                             <h2 class="mb-m">Billing details</h2>
                             <div class="Field Field--group">
@@ -41,14 +41,14 @@
                                     <div class="pt-0 g-b fb1/1 fb1/2@l">
                                         <div class="Field Field--typeTextfield">
                                             <label><span class="Field-label">First name</span>
-                                                <input type="text" name="First name" placeholder="Enter your first name" required>
+                                                <input type="text" name="Firstname" placeholder="Enter your first name" required>
                                             </label>
                                         </div>
                                     </div>
                                     <div class="pt-0 g-b fb1/1 fb1/2@l">
                                         <div class="Field Field--typeTextfield">
                                             <label><span class="Field-label">Last name</span>
-                                                <input type="text" name="Last name" placeholder="Enter your last name" required>
+                                                <input type="text" name="Surname" placeholder="Enter your last name" required>
                                             </label>
                                         </div>
                                     </div>
@@ -56,18 +56,18 @@
                             </div>
                             <div class="Field Field--typeTextfield">
                                 <label><span class="Field-label">Email address</span>
-                                    <input type="email" name="email" required>
+                                    <input type="email" name="Email" required>
                                 </label>
                             </div>
                             <div class="Field Field--typeTextfield">
                                 <label><span class="Field-label">Phone number</span>
-                                    <input type="tel" name="phone" required>
+                                    <input type="tel" name="Phone" required>
                                 </label>
                             </div>
                             <div class="Field Field--typeSelect">
                                 <label>
                                     <span class="Field-label">Country</span>
-                                    <select name="country" data-placeholder="Select country" data-minimum-results-for-search="-1">
+                                    <select name="Country" data-placeholder="Select country" data-minimum-results-for-search="-1">
                                         <option></option>
                                         <option>Australia</option>
                                         <option>USA</option>
@@ -99,14 +99,14 @@
                                     <div class="pt-0 g-b fb1/1 fb2/3@l">
                                         <div class="Field Field--typeTextfield">
                                             <label><span class="Field-label">State / County</span>
-                                                <input type="text" name="state">
+                                                <input type="text" name="State">
                                             </label>
                                         </div>
                                     </div>
                                     <div class="pt-0 g-b fb1/1 fb1/3@l">
                                         <div class="Field Field--typeTextfield">
                                             <label><span class="Field-label">Zip / Postal code</span>
-                                                <input type="text" name="zip">
+                                                <input type="text" name="Zip">
                                             </label>
                                         </div>
                                     </div>
@@ -165,9 +165,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $(function () {
-            $('select[name=country], select[name=australian_state], select[name=australian_suburb]').select2();
+            $('select[name=Country], select[name=australian_state], select[name=australian_suburb]').select2();
 
-            $('select[name=country]').change(function () {
+            $('select[name=Country]').change(function () {
                 if (this.value === 'Australia') {
                     $(australianLocation).slideDown();
                     $(otherLocation).hide();
