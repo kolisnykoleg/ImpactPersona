@@ -4,8 +4,10 @@ class Checkout extends CI_Controller
 {
     public function index()
     {
+        $data['australian_states'] = $this->location->get_australian_states();
+
         $this->load->view('header');
-        $this->load->view('checkout');
+        $this->load->view('checkout', $data);
         $this->load->view('footer');
     }
 

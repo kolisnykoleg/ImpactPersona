@@ -138,4 +138,5 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
     'question_model' => 'question',
+    'location_model' => 'location',
 );

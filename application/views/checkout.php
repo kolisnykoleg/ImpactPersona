@@ -73,7 +73,23 @@
                                     </select>
                                 </label>
                             </div>
-                            <div class="Field Field--group">
+                            <div class="Field Field--group" id="australianLocation">
+                                <div class="Field Field--typeSelect">
+                                    <label><span class="Field-label">State</span>
+                                        <select name="australian_state">
+                                            <?php foreach ($australian_states as $state): ?>
+                                                <option value="<?= $state->ID ?>"><?= $state->Long_name ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="Field Field--typeSelect">
+                                    <label><span class="Field-label">Suburb</span>
+                                        <select name="australian_suburb"></select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="Field Field--group" id="otherLocation">
                                 <div class="mt-0 g g--wrap g--gutterS">
                                     <div class="pt-0 g-b fb1/1 fb2/3@l">
                                         <div class="Field Field--typeTextfield">
@@ -105,3 +121,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $(function () {
+            $('select[name=country]').change(function () {
+                if (this.value === 'Australia') {
+                    $(australianLocation).slideDown();
+                    $(otherLocation).hide();
+                } else {
+                    $(otherLocation).slideDown();
+                    $(australianLocation).hide();
+                }
+            }).trigger('change');
+
+            $('select[name=australian_state]').change(function () {
+                $.post('/locations/get-australian-suburbs', {state_id: this.value}, function (options) {
+                    $('select[name=australian_suburb]').html(options);
+                });
+            }).trigger('change');
+        });
+    });
+</script>
