@@ -15,6 +15,7 @@
     <meta property="og:description" content="">
     <meta property="description" content="">
     <link href="https://fonts.googleapis.com/css2?family=Muli:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css"/>
     <script>

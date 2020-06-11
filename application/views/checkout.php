@@ -65,8 +65,10 @@
                                 </label>
                             </div>
                             <div class="Field Field--typeSelect">
-                                <label><span class="Field-label">Country</span>
-                                    <select name="country">
+                                <label>
+                                    <span class="Field-label">Country</span>
+                                    <select name="country" data-placeholder="Select country" data-minimum-results-for-search="-1">
+                                        <option></option>
                                         <option>Australia</option>
                                         <option>USA</option>
                                         <option>Japan</option>
@@ -76,7 +78,8 @@
                             <div class="Field Field--group" id="australianLocation">
                                 <div class="Field Field--typeSelect">
                                     <label><span class="Field-label">State</span>
-                                        <select name="australian_state">
+                                        <select name="australian_state" data-placeholder="Select state" data-minimum-results-for-search="-1">
+                                            <option></option>
                                             <?php foreach ($australian_states as $state): ?>
                                                 <option value="<?= $state->ID ?>"><?= $state->Long_name ?></option>
                                             <?php endforeach; ?>
@@ -85,7 +88,9 @@
                                 </div>
                                 <div class="Field Field--typeSelect">
                                     <label><span class="Field-label">Suburb</span>
-                                        <select name="australian_suburb"></select>
+                                        <select name="australian_suburb" data-placeholder="Select suburb">
+                                            <option></option>
+                                        </select>
                                     </label>
                                 </div>
                             </div>
@@ -122,9 +127,46 @@
     </div>
 </div>
 
+<style>
+    #australianLocation,
+    #otherLocation {
+        display: none;
+    }
+
+    .Field--typeSelect label:after {
+        display: none;
+    }
+
+    .select2-container--below,
+    [data-select2-id] {
+        width: 100% !important;
+    }
+
+    .select2-container--default .select2-selection--single {
+        border-radius: 0;
+        width: 100%;
+        height: 4.2rem;
+        padding: 0 1.5rem;
+        border: 1px solid #d9d9d9;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 4rem;
+        padding: 0;
+        color: #000;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 4.2rem;
+        width: 30px;
+    }
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $(function () {
+            $('select[name=country], select[name=australian_state], select[name=australian_suburb]').select2();
+
             $('select[name=country]').change(function () {
                 if (this.value === 'Australia') {
                     $(australianLocation).slideDown();
@@ -133,13 +175,15 @@
                     $(otherLocation).slideDown();
                     $(australianLocation).hide();
                 }
-            }).trigger('change');
+            });
 
             $('select[name=australian_state]').change(function () {
                 $.post('/locations/get-australian-suburbs', {state_id: this.value}, function (options) {
-                    $('select[name=australian_suburb]').html(options);
+                    $('select[name=australian_suburb]')
+                    .html(options)
+                    .select2();
                 });
-            }).trigger('change');
+            });
         });
     });
 </script>
