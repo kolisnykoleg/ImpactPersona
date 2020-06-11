@@ -80,7 +80,7 @@ $db['default'] = array(
     'password' => 'f849d8e8',
     'database' => 'heroku_9ecb3e9f0f71ccf',
     'dbdriver' => 'mysqli',
-    'dbprefix' => '',
+    'dbprefix' => 'tbl',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),
     'cache_on' => FALSE,
