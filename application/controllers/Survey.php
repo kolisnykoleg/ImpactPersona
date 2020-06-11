@@ -1,6 +1,6 @@
 <?php
 
-class Questionnaire extends CI_Controller
+class Survey extends CI_Controller
 {
     public function index()
     {
@@ -8,7 +8,7 @@ class Questionnaire extends CI_Controller
         $data['questions_num'] = count($data['questions']);
 
         $this->load->view('header');
-        $this->load->view('questionnaire', $data);
+        $this->load->view('survey', $data);
         $this->load->view('footer');
     }
 }

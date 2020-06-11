@@ -11,12 +11,12 @@
     <meta property="og:type" content="article">
     <meta property="og:image:width" content="966">
     <meta property="og:image:height" content="580">
-    <meta property="og:image" content="assets/img/og-image.jpg">
+    <meta property="og:image" content="/assets/img/og-image.jpg">
     <meta property="og:description" content="">
     <meta property="description" content="">
     <link href="https://fonts.googleapis.com/css2?family=Muli:wght@400;500;600&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="assets/css/slick.min.css"/>
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/app.css"/>
     <script>
         {
             let lastWidth = 0;
@@ -38,7 +38,3 @@
     </script>
 </head>
 <body>
-<div class="Page g g--dirCol">
-    <div class="Page-fixed pv-s g-b fbAuto">
-        <div class="c"><img src="assets/img/logo.png"></div>
-    </div>
