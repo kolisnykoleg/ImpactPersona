@@ -1,1 +1,124 @@
-"use strict";jQuery(function(e){var n=document.querySelector(".Checkout");n&&braintree.dropin.create({authorization:"sandbox_g42y39zw_348pk9cgf3bgyw2b",selector:"#dropin-container"},function(t,r){t?console.log(t):e(n).validate({errorElement:"span",submitHandler:function(e){r.requestPaymentMethod(function(e,n){e&&console.log(e)})}})})}),jQuery(function(e){var n=e(".Slider--survey .Slider-content");n.slick({autoplay:!1,draggable:!1,swipe:!1,touchMove:!1,arrows:!1,infinite:!1});var t=e(".Survey-control--next"),r=e(".Survey-control--end"),o=e(".Survey-progressDone"),i=e(".Survey-progressStepCurrent");e(".Survey-controls").on("click",function(t){var r=e(t.target).closest("button");0!==r.length&&e(r).hasClass("Survey-control--next")&&!1===e(r).prop("disabled")&&e(n).slick("slickNext")}),e(n).on("beforeChange",function(n,c,u,a){e(t).prop("disabled",!0),e(r).prop("disabled",!0),e(i).text(a+1),e(o).css("width",100/c.slideCount*(a+1)+"%")}),e(n).on("afterChange",function(n,o,i){i===o.slideCount-1&&(e(t).addClass("is-hidden"),e(r).removeClass("is-hidden"))})}),jQuery(function(e){var n=e(".Survey-tab"),t=e(".Survey-control");if(n.length){var r=e(".Survey-progressDone"),o=e(".Survey-progressStepsTotal");e(r).css("width",100/n.length+"%"),e(o).text(n.length),e(n).each(function(n,r){var o=e(r).find("input[type=radio]");if(o.length){var i=e.makeArray(o).reduce(function(e,n){var t=n.getAttribute("name");return e[t]||(e[t]=[]),e[t].push(n),e},{});e(o).each(function(n,r){r.addEventListener("change",function(){var n,o=e(r).closest(".Survey-line").find("input[type=radio]");e(o).each(function(e,n){n!==r&&(n.checked=!1)}),n=i,e.map(n,function(e){return[e]}).every(function(e){return e.some(function(e){return e.checked})})?t.each(function(n,t){e(t).prop("disabled",!1)}):t.each(function(n,t){e(t).prop("disabled",!0)})})})}})}});
+"use strict";
+
+jQuery(function ($) {
+  var checkoutForm = document.querySelector(".Checkout");
+  if (!checkoutForm) return; // Braintree drop-in init
+
+  braintree.dropin.create({
+    authorization: "sandbox_g42y39zw_348pk9cgf3bgyw2b",
+    selector: "#dropin-container"
+  }, function (createErr, instance) {
+    if (createErr) {
+      console.log(createErr);
+      return;
+    }
+
+    $(checkoutForm).validate({
+      errorElement: "span",
+      submitHandler: function submitHandler(form) {
+        instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+          if (requestPaymentMethodErr) {
+            console.log(requestPaymentMethodErr);
+            return;
+          } // Ready to send data
+          // Form data: $(form).serialize();
+          // Payment token: payload.nonce
+
+        });
+      }
+    });
+  });
+});
+jQuery(function ($) {
+  var sliderContent = $(".Slider--survey .Slider-content");
+  sliderContent.slick({
+    autoplay: false,
+    draggable: false,
+    swipe: false,
+    touchMove: false,
+    arrows: false,
+    infinite: false
+  });
+  var btnNext = $(".Survey-control--next");
+  var btnEnd = $(".Survey-control--end");
+  var progressBar = $(".Survey-progressDone");
+  var currentStep = $(".Survey-progressStepCurrent");
+  $(".Survey-controls").on("click", function (e) {
+    var target = $(e.target).closest("button");
+    if (target.length === 0) return;
+
+    if ($(target).hasClass("Survey-control--next") && $(target).prop("disabled") === false) {
+      $(sliderContent).slick("slickNext");
+    }
+  });
+  $(sliderContent).on("beforeChange", function (event, slick, currentSlide, nextSlide) {
+    $(btnNext).prop("disabled", true);
+    $(btnEnd).prop("disabled", true);
+    $(currentStep).text(nextSlide + 1);
+    $(progressBar).css("width", 100 / slick.slideCount * (nextSlide + 1) + "%");
+  });
+  $(sliderContent).on("afterChange", function (event, slick, currentSlide) {
+    if (currentSlide === slick.slideCount - 1) {
+      $(btnNext).addClass("is-hidden");
+      $(btnEnd).removeClass("is-hidden");
+    }
+  });
+});
+jQuery(function ($) {
+  var screens = $(".Survey-tab");
+  var controls = $(".Survey-control");
+
+  var disableControls = function disableControls() {
+    controls.each(function (_idx, control) {
+      $(control).prop("disabled", true);
+    });
+  };
+
+  var enableControls = function enableControls() {
+    controls.each(function (_idx, control) {
+      $(control).prop("disabled", false);
+    });
+  };
+
+  var validateChecked = function validateChecked(groups) {
+    var groupsArray = $.map(groups, function (group) {
+      return [group];
+    });
+    return groupsArray.every(function (group) {
+      return group.some(function (radio) {
+        return radio.checked;
+      });
+    });
+  };
+
+  if (screens.length) {
+    var progressBar = $(".Survey-progressDone");
+    var stepsTotal = $(".Survey-progressStepsTotal");
+    $(progressBar).css("width", 100 / screens.length + "%");
+    $(stepsTotal).text(screens.length);
+    $(screens).each(function (_idx, screen) {
+      var radios = $(screen).find("input[type=radio]");
+      if (!radios.length) return;
+      var radiosGroups = $.makeArray(radios).reduce(function (result, el) {
+        var name = el.getAttribute("name");
+
+        if (!result[name]) {
+          result[name] = [];
+        }
+
+        result[name].push(el);
+        return result;
+      }, {});
+      $(radios).each(function (_idx, radio) {
+        radio.addEventListener("change", function () {
+          var siblingRadios = $(radio).closest(".Survey-line").find("input[type=radio]");
+          $(siblingRadios).each(function (_idx, siblingRadio) {
+            if (siblingRadio === radio) return;
+            siblingRadio.checked = false;
+          });
+          validateChecked(radiosGroups) ? enableControls() : disableControls();
+        });
+      });
+    });
+  }
+});
