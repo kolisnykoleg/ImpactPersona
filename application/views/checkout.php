@@ -12,19 +12,10 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="22" height="22">
                                     <path d="M405 363a64 64 0 101 127 64 64 0 00-1-127zm0 89a26 26 0 110-51 26 26 0 010 51zM508 116c-4-5-9-7-15-7H118l-17-73c-2-8-10-14-19-14H19a19 19 0 100 38h48l62 260c3 9 10 15 19 15h298c9 0 17-6 19-14l46-189c2-5 1-11-3-16zm-77 181H163l-36-150h341l-37 150zM174 363a64 64 0 100 127 64 64 0 000-127zm0 89a26 26 0 110-51 26 26 0 010 51z"></path>
                                 </svg>
-                                Cart summary<span class="Cart-titleLink">(<a href="#edit">Edit</a>)</span>
+                                Cart summary<span class="Cart-titleLink"></span>
                             </h2>
-                            <div class="ph-m">
-                                <div class="Cart-item pb-s">
-                                    <h3 class="g"><span>1 x Maker The Agency Theme</span><span class="Cart-itemPrice">$49.89</span></h3>
-                                    <p>Amazing UI Kit pack perfect for your next project</p>
-                                </div>
-                                <div class="Cart-item pb-s">
-                                    <h3 class="g"><span>1 x Maker The Agency Theme</span><span class="Cart-itemPrice">$49.89</span></h3>
-                                    <p>Amazing UI Kit pack perfect for your next project</p>
-                                </div>
-                            </div>
-                            <div class="Cart-summary pv-xs ph-m">Sub total: <b>$102.44</b></div>
+                            <div class="ph-m" id="cartItems"></div>
+                            <div class="Cart-summary pv-xs ph-m">Sub total: <b>$<span id="cartTotal"></span></b></div>
                         </div>
                         <div class="Cart-helper mt-xs">
                             <p>Need help with your order?</p>
@@ -160,11 +151,25 @@
         height: 4.2rem;
         width: 30px;
     }
+
+    .cart-delete {
+        background: #dc3545;
+        color: #fff;
+        cursor: pointer;
+        user-select: none;
+        border-radius: .25rem;
+        font-size: 1.5rem;
+        padding: .1rem .25rem;
+        margin-left: 10px;
+        align-self: baseline;
+    }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $(function () {
+            renderCart();
+
             $('select[name=Country], select[name=australian_state], select[name=australian_suburb]').select2();
 
             $('select[name=Country]').change(function () {
@@ -175,6 +180,8 @@
                     $(otherLocation).slideDown();
                     $(australianLocation).hide();
                 }
+
+                $.post('/checkout/cart-currency', {country: this.value}, renderCart);
             });
 
             $('select[name=australian_state]').change(function () {
@@ -184,6 +191,27 @@
                     .select2();
                 });
             });
+
+            $(document).on('click', '.cart-delete', function () {
+                let id = $(this).data('id');
+                let country = $('select[name=Country]').val();
+                $.post('/checkout/cart-delete', {id, country}, renderCart);
+            });
+
         });
     });
+
+    function renderCart() {
+        $.post('/checkout/cart', cart => {
+            $(cartItems).empty();
+            for (const assessment of cart.assessments) {
+                $(cartItems).append(`
+                <div class="Cart-item pb-s">
+                    <h3 class="g"><span>${assessment.Name}</span><button data-id="${assessment.ID}" class="cart-delete">Delete</button><span class="Cart-itemPrice">$${assessment.Price}</span></h3>
+                    <p>${assessment.Description_Short}</p>
+                </div>`);
+            }
+            $(cartTotal).text(cart.total);
+        }, 'json');
+    }
 </script>

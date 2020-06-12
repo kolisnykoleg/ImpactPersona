@@ -60,6 +60,7 @@ $autoload['packages'] = array();
 */
 $autoload['libraries'] = array(
     'database',
+    'session',
 );
 
 /*
@@ -140,4 +141,5 @@ $autoload['model'] = array(
     'question_model' => 'question',
     'location_model' => 'location',
     'customer_model' => 'customer',
+    'assessment_model' => 'assessment',
 );
