@@ -94,6 +94,7 @@ $autoload['drivers'] = array();
 */
 $autoload['helper'] = array(
     'dd',
+    'url',
 );
 
 /*

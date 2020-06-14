@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <form class="Survey" method="post" action="checkout.html">
+        <form class="Survey" method="post" action="/survey/save">
             <div class="c">
                 <div class="pv-m">
                     <div class="Survey-progress">
@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php foreach ($item['answers'] as $answer): ?>
+                                    <?php foreach ($item['answers'] as $answer_id => $answer): ?>
                                         <div class="Survey-line g g--gutterXXS">
                                             <div class="g-b g-b--w1 fbAuto">
                                                 <div class="Survey-question g g--alignCenter"><?= $answer ?></div>
@@ -71,14 +71,14 @@
                                                 <div class="g-b fb1/2">
                                                     <div class="Survey-radio">
                                                         <label class="g g--spaceCenter g--alignCenter"><span class="Survey-radioLabel">Most Like Me</span>
-                                                            <input type="radio" name="q<?= $question_id ?>-most" value="Most: <?= $answer ?>"><span class="Survey-radioFake"></span>
+                                                            <input type="radio" name="questions[<?= $question_id ?>][most]" value="<?= $answer_id ?>"><span class="Survey-radioFake"></span>
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <div class="g-b fb1/2">
                                                     <div class="Survey-radio">
                                                         <label class="g g--spaceCenter g--alignCenter"><span class="Survey-radioLabel">Least Like Me</span>
-                                                            <input type="radio" name="q<?= $question_id ?>-least" value="Least: <?= $answer ?>"><span class="Survey-radioFake"></span>
+                                                            <input type="radio" name="questions[<?= $question_id ?>][least]" value="<?= $answer_id ?>"><span class="Survey-radioFake"></span>
                                                         </label>
                                                     </div>
                                                 </div>

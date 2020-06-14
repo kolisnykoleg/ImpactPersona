@@ -6,7 +6,7 @@ class Location_model extends CI_Model
     {
         return $this->db
             ->select('ID, Short_name, Long_name')
-            ->get('australianStates')
+            ->get('AustralianStates')
             ->result();
     }
 
@@ -15,7 +15,7 @@ class Location_model extends CI_Model
         return $this->db
             ->select('Suburb, Postcode')
             ->where('State_ID', $state_id)
-            ->get('australianSuburbs');
+            ->get('AustralianSuburbs');
     }
 
     public function get_australian_state_by_id($state_id)
@@ -23,7 +23,7 @@ class Location_model extends CI_Model
         return $this->db
             ->select('Short_Name, Long_Name')
             ->where('ID', $state_id)
-            ->get('australianStates')
+            ->get('AustralianStates')
             ->row();
     }
 

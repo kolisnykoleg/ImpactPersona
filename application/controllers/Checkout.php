@@ -15,26 +15,34 @@ class Checkout extends CI_Controller
 
     public function purchase()
     {
-        $data = $this->input->post(null, true);
-        $state_id = $data['australian_state'];
-        $suburb_zip = $data['australian_suburb'];
+        $customer_id = $this->add_customer();
+        $this->session->set_userdata('customer_id', $customer_id);
+    }
 
+    private function add_customer()
+    {
+        $firstname = $this->input->post('Firstname', true);
+        $surname = $this->input->post('Surname', true);
+        $email = $this->input->post('Email', true);
+        $phone = $this->input->post('Phone', true);
+        $country = $this->input->post('Country', true);
+        $state = $this->input->post('State', true);
+        $zip = $this->input->post('Zip', true);
+
+        $state_id = $this->input->post('australian_state');
+        $suburb_zip = $this->input->post('australian_suburb', true);
         if ($australian_location = $this->location->get_australian_location($state_id, $suburb_zip)) {
-            list($data['State'], $data['Zip']) = $australian_location;
+            list($state, $zip) = $australian_location;
         }
-        unset(
-            $data['australian_state'],
-            $data['australian_suburb']
-        );
 
-        $customer_create = $this->customer->create([
-            'Firstname' => $data['Firstname'],
-            'Surname' => $data['Surname'],
-            'Email' => $data['Email'],
-            'Phone' => $data['Phone'],
-            'Country' => $data['Country'],
-            'State' => $data['State'],
-            'Zip' => $data['Zip'],
+        return $this->customer->create([
+            'Firstname' => $firstname,
+            'Surname' => $surname,
+            'Email' => $email,
+            'Phone' => $phone,
+            'Country' => $country,
+            'State' => $state,
+            'Zip' => $zip,
         ]);
     }
 

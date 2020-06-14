@@ -23,7 +23,7 @@ jQuery(function ($) {
           } // Ready to send data
           // Form data: $(form).serialize();
           // Payment token: payload.nonce
-
+          form.submit();
         });
       }
     });
