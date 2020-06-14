@@ -12,7 +12,7 @@
                     </svg>
                 </div>
                 <h1 class="mb-m">Transaction Complete!</h1>
-                <p><b>Thanks, John Doe!</b></p>
+                <p><b>Thanks, <?= $customer_name ?>!</b></p>
                 <p>Receipt number: ABCD1234</p>
                 <p>If you're ready and have a...</p>
             </div>

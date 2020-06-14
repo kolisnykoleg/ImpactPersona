@@ -5,7 +5,7 @@ class Survey extends CI_Controller
     public function index()
     {
         if (!$this->session->has_userdata('customer_id')) {
-            redirect(base_url('/checkout'));
+            redirect('/checkout');
         }
 
         $assessment_id = $this->session->cart['assessments'][0]->ID;

@@ -15,8 +15,13 @@ class Checkout extends CI_Controller
 
     public function purchase()
     {
-        $customer_id = $this->add_customer();
-        $this->session->set_userdata('customer_id', $customer_id);
+        try {
+            $customer_id = $this->add_customer();
+            $this->session->set_userdata('customer_id', $customer_id);
+            redirect('/transaction-complete');
+        } catch (Exception $e) {
+            redirect('/transaction-failed');
+        }
     }
 
     private function add_customer()
@@ -48,8 +53,11 @@ class Checkout extends CI_Controller
 
     public function complete()
     {
+        $customer = $this->customer->get_by_id($this->session->customer_id);
+        $data['customer_name'] = $customer->Firstname . ' ' . $customer->Surname;
+
         $this->load->view('header');
-        $this->load->view('transaction_complete');
+        $this->load->view('transaction_complete', $data);
         $this->load->view('footer');
     }
 

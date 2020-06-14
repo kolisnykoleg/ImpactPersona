@@ -10,4 +10,11 @@ class Customer_model extends CI_Model
             throw new Exception($this->db->error()['message']);
         }
     }
+
+    public function get_by_id($customer_id)
+    {
+        return $this->db
+            ->get_where('Customers', ['id' => $customer_id])
+            ->row();
+    }
 }
