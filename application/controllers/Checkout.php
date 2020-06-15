@@ -7,6 +7,7 @@ class Checkout extends CI_Controller
         $this->cart_update('Price_USD');
         $data['australian_states'] = $this->location->get_australian_states();
         $data['assessments'] = $this->assessment->get_all_active();
+        $data['token'] = $this->transaction->token();
 
         $this->load->view('header');
         $this->load->view('checkout', $data);
@@ -17,6 +18,14 @@ class Checkout extends CI_Controller
     {
         try {
             $customer_id = $this->add_customer();
+
+            $nonce = $this->input->post('nonce');
+            $amount = $this->session->cart['total'];
+            $currency = 'AUD';
+            $product_id = $this->session->cart['assessments'][0]->ID;
+            $transaction_id = $this->transaction->sale($nonce, $amount, $currency, $customer_id, $product_id);
+            $this->session->set_userdata('transaction_id', $transaction_id);
+
             $this->session->set_userdata('customer_id', $customer_id);
             redirect('/transaction-complete');
         } catch (Exception $e) {
@@ -55,6 +64,7 @@ class Checkout extends CI_Controller
     {
         $customer = $this->customer->get_by_id($this->session->customer_id);
         $data['customer_name'] = $customer->Firstname . ' ' . $customer->Surname;
+        $data['receipt_number'] = strtoupper($this->session->transaction_id);
 
         $this->load->view('header');
         $this->load->view('transaction_complete', $data);

@@ -143,4 +143,5 @@ $autoload['model'] = array(
     'location_model' => 'location',
     'customer_model' => 'customer',
     'assessment_model' => 'assessment',
+    'transaction_model' => 'transaction',
 );

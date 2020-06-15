@@ -1,6 +1,6 @@
 <div class="Page Page--action Page--transactionComplete g g--dirCol">
     <div class="Page-fixed pv-s g-b fbAuto">
-        <div class="c"><img src="assets/img/logo.png"></div>
+        <div class="c"><img src="/assets/img/logo.png"></div>
     </div>
     <div class="Page-content bg-g95 pv-xl g-b g-b--w1 fbAuto">
         <div class="c">
@@ -13,7 +13,7 @@
                 </div>
                 <h1 class="mb-m">Transaction Complete!</h1>
                 <p><b>Thanks, <?= $customer_name ?>!</b></p>
-                <p>Receipt number: ABCD1234</p>
+                <p>Receipt number: <?= $receipt_number ?></p>
                 <p>If you're ready and have a...</p>
             </div>
             <div class="Page-actions"><a class="Btn" href="/survey">Start Questionnaire</a></div>

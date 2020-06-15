@@ -214,4 +214,6 @@
             $(cartTotal).text(cart.total);
         }, 'json');
     }
+
+    let braintreeToken = '<?= $token ?>';
 </script>

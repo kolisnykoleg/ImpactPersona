@@ -1,6 +1,6 @@
 <div class="Page Page--action Page--transactionFailed g g--dirCol">
     <div class="Page-fixed pv-s g-b fbAuto">
-        <div class="c"><img src="assets/img/logo.png"></div>
+        <div class="c"><img src="/assets/img/logo.png"></div>
     </div>
     <div class="Page-content bg-g95 pv-xl g-b g-b--w1 fbAuto">
         <div class="c">
@@ -12,7 +12,7 @@
                     </svg>
                 </div>
                 <h1 class="mb-m">Transaction Failed!</h1>
-                <p><b>Sorry, John Doe!</b></p>
+                <p><b>Sorry!</b></p>
                 <p>Something went wrong</p>
                 <p>If you're ready and have a...</p>
             </div>
