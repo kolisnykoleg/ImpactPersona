@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <form class="Survey" method="post" action="/survey/save">
+        <form class="Survey" method="post" action="/questionnaire-completed">
             <div class="c">
                 <div class="pv-m">
                     <div class="Survey-progress">

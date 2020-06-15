@@ -39,4 +39,9 @@ class Transaction_model extends CI_Model
     {
         return $this->db->insert('Transactions', $transaction_data);
     }
+
+    public function update($transaction_data, $transaction_id)
+    {
+        return $this->db->update('Transactions', $transaction_data, ['Transaction_Key' => $transaction_id]);
+    }
 }

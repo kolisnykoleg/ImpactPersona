@@ -4,8 +4,8 @@ class Survey extends CI_Controller
 {
     public function index()
     {
-        if (!$this->session->has_userdata('customer_id')) {
-            redirect('/checkout');
+        if (!$this->session->has_userdata('transaction_id')) {
+            redirect('/');
         }
 
         $assessment_id = $this->session->cart['assessments'][0]->ID;
@@ -17,12 +17,18 @@ class Survey extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function save()
+    public function completed()
     {
-        $data = [];
         $customer_id = $this->session->customer_id;
         $assessment_id = $this->session->cart['assessments'][0]->ID;
+        $transaction_id = $this->session->transaction_id;
         $questions = $this->input->post('questions');
+
+        if (!($questions && $customer_id && $assessment_id && $transaction_id)) {
+            redirect('/');
+        }
+
+        $data = [];
         foreach ($questions as $question_id => $answer) {
             foreach ($answer as $answer_type => $answer_id) {
                 $data[] = [
@@ -36,5 +42,16 @@ class Survey extends CI_Controller
         }
 
         $this->assessment->save_survey($data);
+        $this->transaction->update([
+            'Questionnaire_Status' => 'y'
+        ], $transaction_id);
+
+        $this->session->sess_destroy();
+
+        $data['customer_name'] = $this->customer->full_name($customer_id);
+
+        $this->load->view('header');
+        $this->load->view('survey_complete', $data);
+        $this->load->view('footer');
     }
 }

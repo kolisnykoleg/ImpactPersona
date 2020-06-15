@@ -62,8 +62,7 @@ class Checkout extends CI_Controller
 
     public function complete()
     {
-        $customer = $this->customer->get_by_id($this->session->customer_id);
-        $data['customer_name'] = $customer->Firstname . ' ' . $customer->Surname;
+        $data['customer_name'] = $this->customer->full_name($this->session->customer_id);
         $data['receipt_number'] = strtoupper($this->session->transaction_id);
 
         $this->load->view('header');

@@ -55,3 +55,5 @@ $route['translate_uri_dashes'] = TRUE;
 
 $route['transaction-complete'] = 'checkout/complete';
 $route['transaction-failed'] = 'checkout/failed';
+
+$route['questionnaire-completed'] = 'survey/completed';

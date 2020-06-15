@@ -17,4 +17,9 @@ class Customer_model extends CI_Model
             ->get_where('Customers', ['id' => $customer_id])
             ->row();
     }
+
+    public function full_name($customer_id) {
+        $customer = $this->get_by_id($customer_id);
+        return $customer->Firstname . ' ' . $customer->Surname;
+    }
 }
