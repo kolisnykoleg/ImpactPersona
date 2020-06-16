@@ -4,9 +4,16 @@ jQuery(function ($) {
     var checkoutForm = document.querySelector(".Checkout");
     if (!checkoutForm) return; // Braintree drop-in init
 
+    setTimeout(() => {
     braintree.dropin.create({
         authorization: braintreeToken,
-        selector: "#dropin-container"
+        selector: "#dropin-container",
+        paymentOptionPriority: ['paypal'],
+        paypal: {
+            flow: 'checkout',
+            amount: $('#cartTotal').text(),
+            currency: 'AUD'//$('select[name=Country]').val() === 'Australia' ? 'AUD' : 'USD'
+        },
     }, function (createErr, instance) {
         if (createErr) {
             console.log(createErr);
@@ -33,6 +40,7 @@ jQuery(function ($) {
             }
         });
     });
+    }, 1000);
 });
 jQuery(function ($) {
     var sliderContent = $(".Slider--survey .Slider-content");

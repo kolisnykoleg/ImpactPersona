@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41b3cdef7d7b5bca16290bf03e15e079",
+    "content-hash": "f95bb7dafe9841f4b1bc7d329de57c86",
     "packages": [
         {
             "name": "braintree/braintree_php",
-            "version": "5.1.0",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "3b46d99056ee7199097cd72aeb7e886f857cab72"
+                "reference": "6cf3447ecd0303caa6f2d4f22b653dc5c71b4589"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/3b46d99056ee7199097cd72aeb7e886f857cab72",
-                "reference": "3b46d99056ee7199097cd72aeb7e886f857cab72",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/6cf3447ecd0303caa6f2d4f22b653dc5c71b4589",
+                "reference": "6cf3447ecd0303caa6f2d4f22b653dc5c71b4589",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 }
             ],
             "description": "Braintree PHP Client Library",
-            "time": "2020-05-12T21:25:05+00:00"
+            "time": "2020-06-15T19:02:23+00:00"
         }
     ],
     "packages-dev": [
@@ -1361,7 +1361,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.4.9",
+            "version": "v4.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -1473,7 +1473,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4"
+        "php": ">=7.2"
     },
     "platform-dev": []
 }
