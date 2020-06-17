@@ -40,7 +40,7 @@ class Assessment_model extends CI_Model
     {
         $this->email
             ->from($this->email->smtp_user, 'ImpactPersona')
-            ->to($to)
+            ->to('scott.holland@rgbsolutions.com.au')
             ->subject('DISC Test Results')
             ->message($results)
             ->send();
