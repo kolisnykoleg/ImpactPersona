@@ -46,6 +46,10 @@ class Survey extends CI_Controller
             'Questionnaire_Status' => 'y'
         ], $transaction_id);
 
+        $customer_email = $this->customer->get_by_id($customer_id)->Email;
+        $results = json_encode($this->assessment->get_assessment($customer_id, $assessment_id), JSON_PRETTY_PRINT);
+        $this->assessment->send_results($customer_email, $results);
+
         $this->session->sess_destroy();
 
         $data['customer_name'] = $this->customer->full_name($customer_id);

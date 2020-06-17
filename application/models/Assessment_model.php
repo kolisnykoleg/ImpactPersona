@@ -16,15 +16,24 @@ class Assessment_model extends CI_Model
         return $this->db->insert_batch('DISCSurveys', $data);
     }
 
-    public function get_results($customer_id, $assessment_id)
+    public function get_assessment($customer_id, $assessment_id)
     {
-        return $this->db
+        $result = $this->db
             ->select('s.Answer_Type, a.DISC')
             ->from('DISCSurveys as s')
             ->join('DISCAnswers as a', 'a.ID = s.Answer_ID')
             ->where(['s.Customer_ID' => $customer_id, 's.Assessment_ID' => $assessment_id])
-            ->get()
-            ->result();
+            ->get();
+
+        $assessment = [
+            'least' => array_fill_keys(['D', 'I', 'S', 'C'], 0),
+            'most' => array_fill_keys(['D', 'I', 'S', 'C'], 0),
+        ];
+        while ($row = $result->unbuffered_row()) {
+            $assessment[$row->Answer_Type][$row->DISC]++;
+        }
+
+        return $assessment;
     }
 
     public function send_results($to, $results)
