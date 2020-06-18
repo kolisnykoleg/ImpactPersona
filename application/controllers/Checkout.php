@@ -22,10 +22,14 @@ class Checkout extends CI_Controller
             $nonce = $this->input->post('nonce');
             $amount = $this->session->cart['total'];
             $currency = 'AUD';
-            $product_id = $this->session->cart['assessments'][0]->ID;
-            $transaction_id = $this->transaction->sale($nonce, $amount, $currency, $customer_id, $product_id);
-            $this->session->set_userdata('transaction_id', $transaction_id);
+            $product_ids = array_map(function ($assessment) {
+                return $assessment->ID;
+            }, $this->session->cart['assessments']);
+            $transaction_key = $this->transaction->sale($nonce, $amount, $currency, $customer_id, $product_ids);
 
+            $this->transaction->send_email($customer_id, $transaction_key);
+
+            $this->session->set_userdata('transaction_key', $transaction_key);
             $this->session->set_userdata('customer_id', $customer_id);
             redirect('/transaction-complete');
         } catch (Exception $e) {
@@ -63,7 +67,7 @@ class Checkout extends CI_Controller
     public function complete()
     {
         $data['customer_name'] = $this->customer->full_name($this->session->customer_id);
-        $data['receipt_number'] = strtoupper($this->session->transaction_id);
+        $data['receipt_number'] = strtoupper($this->session->transaction_key);
 
         $this->load->view('header');
         $this->load->view('transaction_complete', $data);

@@ -18,8 +18,20 @@ class Customer_model extends CI_Model
             ->row();
     }
 
-    public function full_name($customer_id) {
+    public function full_name($customer_id)
+    {
         $customer = $this->get_by_id($customer_id);
         return $customer->Firstname . ' ' . $customer->Surname;
+    }
+
+    public function get_by_transaction($transaction_key)
+    {
+        return $this->db
+            ->select('c.*')
+            ->from('Customers as c')
+            ->join('Transactions as t', 't.Customer_ID = c.ID')
+            ->where('t.Transaction_Key', $transaction_key)
+            ->get()
+            ->row();
     }
 }

@@ -57,3 +57,4 @@ $route['transaction-complete'] = 'checkout/complete';
 $route['transaction-failed'] = 'checkout/failed';
 
 $route['questionnaire-completed'] = 'survey/completed';
+$route['survey/(:any)/(:any)'] = 'survey/index/$1/$2';

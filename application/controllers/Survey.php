@@ -2,14 +2,18 @@
 
 class Survey extends CI_Controller
 {
-    public function index()
+    public function index($url, $transaction_key)
     {
-        if (!$this->session->has_userdata('transaction_id')) {
+        $assessment = $this->assessment->get_by_url_and_transaction($url, $transaction_key);
+
+        if (empty($assessment)) {
             redirect('/');
         }
 
-        $assessment_id = $this->session->cart['assessments'][0]->ID;
-        $data['questions'] = $this->question->get_all($assessment_id);
+        $this->session->set_userdata('assessment_id', $assessment->ID);
+        $this->session->set_userdata('transaction_key', $transaction_key);
+
+        $data['questions'] = $this->question->get_all($assessment->ID);
         $data['questions_num'] = count($data['questions']);
 
         $this->load->view('header');
@@ -19,20 +23,21 @@ class Survey extends CI_Controller
 
     public function completed()
     {
-        $customer_id = $this->session->customer_id;
-        $assessment_id = $this->session->cart['assessments'][0]->ID;
-        $transaction_id = $this->session->transaction_id;
+        $assessment_id = $this->session->assessment_id;
+        $transaction_key = $this->session->transaction_key;
         $questions = $this->input->post('questions');
 
-        if (!($questions && $customer_id && $assessment_id && $transaction_id)) {
+        if (!($questions && $assessment_id && $transaction_key)) {
             redirect('/');
         }
+
+        $customer = $this->customer->get_by_transaction($transaction_key);
 
         $data = [];
         foreach ($questions as $question_id => $answer) {
             foreach ($answer as $answer_type => $answer_id) {
                 $data[] = [
-                    'Customer_ID' => $customer_id,
+                    'Customer_ID' => $customer->ID,
                     'Assessment_ID' => $assessment_id,
                     'Question_ID' => $question_id,
                     'Answer_ID' => $answer_id,
@@ -42,17 +47,14 @@ class Survey extends CI_Controller
         }
 
         $this->assessment->save_survey($data);
-        $this->transaction->update([
-            'Questionnaire_Status' => 'y'
-        ], $transaction_id);
+        $this->assessment->update_questionnaire_status($assessment_id, $transaction_key, 'y');
 
-        $customer_email = $this->customer->get_by_id($customer_id)->Email;
-        $results = json_encode($this->assessment->get_assessment($customer_id, $assessment_id), JSON_PRETTY_PRINT);
-        $this->assessment->send_results($customer_email, $results);
+        $results = json_encode($this->assessment->get_assessment($customer->ID, $assessment_id), JSON_PRETTY_PRINT);
+        $this->assessment->send_results($results);
 
         $this->session->sess_destroy();
 
-        $data['customer_name'] = $this->customer->full_name($customer_id);
+        $data['customer_name'] = $this->customer->full_name($customer->ID);
 
         $this->load->view('header');
         $this->load->view('survey_complete', $data);
