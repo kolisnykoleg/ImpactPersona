@@ -14,8 +14,7 @@
                                 </svg>
                                 Cart summary<span class="Cart-titleLink"></span>
                             </h2>
-                            <div class="ph-m" id="cartItems"></div>
-                            <div class="Cart-summary pv-xs ph-m">Sub total: <b>$<span id="cartTotal"></span></b></div>
+                            <div id="cart"></div>
                         </div>
                         <div class="Cart-helper mt-xs">
                             <p>Need help with your order?</p>
@@ -174,11 +173,11 @@
 
             $('select[name=Country]').change(function () {
                 if (this.value === 'Australia') {
-                    $(australianLocation).slideDown();
-                    $(otherLocation).hide();
+                    $('#australianLocation').slideDown();
+                    $('#otherLocation').hide();
                 } else {
-                    $(otherLocation).slideDown();
-                    $(australianLocation).hide();
+                    $('#otherLocation').slideDown();
+                    $('#australianLocation').hide();
                 }
 
                 $.post('/checkout/cart-currency', {country: this.value}, renderCart);
@@ -202,17 +201,9 @@
     });
 
     function renderCart() {
-        $.post('/checkout/cart', cart => {
-            $(cartItems).empty();
-            for (const assessment of cart.assessments) {
-                $(cartItems).append(`
-                <div class="Cart-item pb-s">
-                    <h3 class="g"><span>${assessment.Name}</span><button data-id="${assessment.ID}" class="cart-delete">Delete</button><span class="Cart-itemPrice">$${assessment.Price}</span></h3>
-                    <p>${assessment.Description_Short}</p>
-                </div>`);
-            }
-            $(cartTotal).text(cart.total);
-        }, 'json');
+        $.post('/checkout/cart', function(html) {
+            $('#cart').html(html);
+        });
     }
 
     let braintreeToken = '<?= $token ?>';

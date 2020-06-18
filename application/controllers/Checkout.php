@@ -110,7 +110,16 @@ class Checkout extends CI_Controller
 
     public function cart()
     {
-        echo json_encode($this->session->cart);
+        echo "<div class='ph-m'>";
+        foreach ($this->session->cart['assessments'] as $assessment) {
+            echo
+            "<div class='Cart-item pb-s'>
+                <h3 class='g'><span>$assessment->Name</span><button data-id='$assessment->ID' class='cart-delete'>Delete</button><span class='Cart-itemPrice'>$assessment->Price</span></h3>
+                <p>$assessment->Description_Short</p>
+            </div>";
+        }
+        $total = $this->session->cart['total'];
+        echo "</div><div class='Cart-summary pv-xs ph-m'>Sub total: <b>$<span id='cartTotal'>$total</span></b></div>";
     }
 
     public function cart_delete()
