@@ -53,7 +53,11 @@ class Survey extends CI_Controller
         $this->assessment->save_survey($data);
         $this->assessment->update_questionnaire_status($assessment_id, $transaction_key, 'y');
 
-        $results = json_encode($this->assessment->get_assessment($customer->ID, $assessment_id), JSON_PRETTY_PRINT);
+        $results = json_encode([
+            'results' => $this->assessment->get_assessment($customer->ID, $assessment_id),
+            'customer' => $customer,
+        ], JSON_PRETTY_PRINT);
+
         $this->assessment->send_results($results);
 
         $this->session->sess_destroy();
