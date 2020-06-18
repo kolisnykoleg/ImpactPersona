@@ -2,8 +2,12 @@
 
 class Survey extends CI_Controller
 {
-    public function index($url, $transaction_key)
+    public function index($url = null, $transaction_key = null)
     {
+        if (!($url && $transaction_key)) {
+            redirect('/');
+        }
+
         $assessment = $this->assessment->get_by_url_and_transaction($url, $transaction_key);
 
         if (empty($assessment)) {

@@ -61,7 +61,7 @@ class Transaction_model extends CI_Model
 
         $message = '';
         while ($row = $result->unbuffered_row()) {
-            $message .= $row->Name . ' ' . base_url($row->URL . '/' . $transaction_key) . "\n";
+            $message .= $row->Name . ' ' . base_url('survey/' . $row->URL . '/' . $transaction_key) . "\n";
         }
 
         $customer = $this->customer->get_by_id($customer_id);
