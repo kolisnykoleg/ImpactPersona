@@ -4,7 +4,9 @@ class Checkout extends CI_Controller
 {
     public function index()
     {
-        $this->cart_update('Price_USD');
+        if (!$this->session->has_userdata('cart')) {
+            $this->cart_update([], 'Price_USD');
+        }
         $data['countries'] = $this->location->get_countries();
         $data['australian_states'] = $this->location->get_australian_states();
         $data['assessments'] = $this->assessment->get_all_active();
@@ -82,19 +84,20 @@ class Checkout extends CI_Controller
         $this->load->view('footer');
     }
 
-    private function cart_update($currency)
+    private function cart_update($assessments, $currency)
     {
-        $assessments = $this->assessment->get_all_active();
         $assessments = array_map(function ($assessment) use ($currency) {
-            $assessment->Price = $assessment->{$currency};
-            unset(
-                $assessment->Price_AUD,
-                $assessment->Price_USD
-            );
+            if (!isset($assessment->Price)) {
+                $assessment->Price = $assessment->{$currency};
+                unset(
+                    $assessment->Price_AUD,
+                    $assessment->Price_USD
+                );
+            }
             return $assessment;
         }, $assessments);
 
-        $total = $this->cart_total($assessments, $currency);
+        $total = $this->cart_total($assessments);
 
         $this->session->set_userdata('cart', [
             'assessments' => $assessments,
@@ -152,7 +155,21 @@ class Checkout extends CI_Controller
             ? 'Price_AUD'
             : 'Price_USD';
 
-        $this->cart_update($currency);
+        $this->cart_update($this->session->cart['assessments'], $currency);
+    }
+
+    public function cart_add()
+    {
+        $success = false;
+        $product = $this->input->post('product');
+
+        $assessment = $this->assessment->get_by_url($product);
+        if (isset($assessment) && $assessment->Active_Status) {
+            $this->cart_update([$assessment], 'Price_USD');
+            $success = true;
+        }
+
+        echo json_encode(['success' => $success]);
     }
 
 }

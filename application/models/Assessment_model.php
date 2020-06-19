@@ -78,4 +78,11 @@ class Assessment_model extends CI_Model
 
         return $this->db->update('AssessmentsToTransactions', ['Questionnaire_Status' => $status], ['ID' => $id]);
     }
+
+    public function get_by_url($url)
+    {
+        return $this->db
+            ->get_where('DISCAssessments', ['URL' => $url])
+            ->row();
+    }
 }
