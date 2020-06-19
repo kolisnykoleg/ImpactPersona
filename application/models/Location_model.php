@@ -39,4 +39,12 @@ class Location_model extends CI_Model
             $zip
         ];
     }
+
+    public function get_countries()
+    {
+        return $this->db
+            ->select('Code, Name')
+            ->get('Countries')
+            ->result();
+    }
 }

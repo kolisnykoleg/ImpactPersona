@@ -5,6 +5,7 @@ class Checkout extends CI_Controller
     public function index()
     {
         $this->cart_update('Price_USD');
+        $data['countries'] = $this->location->get_countries();
         $data['australian_states'] = $this->location->get_australian_states();
         $data['assessments'] = $this->assessment->get_all_active();
         $data['token'] = $this->transaction->token();
@@ -147,7 +148,7 @@ class Checkout extends CI_Controller
 
     public function cart_currency()
     {
-        $currency = $this->input->post('country') == 'Australia'
+        $currency = $this->input->post('country') == 'AU'
             ? 'Price_AUD'
             : 'Price_USD';
 

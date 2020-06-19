@@ -57,11 +57,11 @@
                             <div class="Field Field--typeSelect">
                                 <label>
                                     <span class="Field-label">Country</span>
-                                    <select name="Country" data-placeholder="Select country" data-minimum-results-for-search="-1">
+                                    <select name="Country" data-placeholder="Select country">
                                         <option></option>
-                                        <option>Australia</option>
-                                        <option>USA</option>
-                                        <option>Japan</option>
+                                        <?php foreach ($countries as $country): ?>
+                                            <option value="<?= $country->Code ?>"><?= $country->Name ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </label>
                             </div>
@@ -172,7 +172,7 @@
             $('select[name=Country], select[name=australian_state], select[name=australian_suburb]').select2();
 
             $('select[name=Country]').change(function () {
-                if (this.value === 'Australia') {
+                if (this.value === 'AU') {
                     $('#australianLocation').slideDown();
                     $('#otherLocation').hide();
                 } else {
