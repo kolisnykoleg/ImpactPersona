@@ -103,9 +103,12 @@ class Checkout extends CI_Controller
 
     private function cart_total($assessments)
     {
-        return array_reduce($assessments, function ($total, $assessment) {
+        $sum = array_reduce($assessments, function ($total, $assessment) {
             return $total + $assessment->Price;
         }, 0);
+        return is_float($sum)
+            ? number_format($sum, 2)
+            : $sum;
     }
 
     public function cart()
