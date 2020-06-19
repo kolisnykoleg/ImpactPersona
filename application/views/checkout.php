@@ -1,6 +1,6 @@
 <div class="Page g g--dirCol">
     <div class="Page-fixed pv-s g-b fbAuto">
-        <div class="c"><img src="assets/img/logo.png"></div>
+        <div class="c"><img src="/assets/img/logo.png"></div>
     </div>
     <div class="Page-content bg-g95 pv-xl g-b g-b--w1 fbAuto">
         <div class="c">
