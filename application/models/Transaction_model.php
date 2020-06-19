@@ -18,7 +18,7 @@ class Transaction_model extends CI_Model
             $this->save([
                 'Customer_ID' => $customer_id,
                 'Sales_Amount' => $result->transaction->amount,
-                'Fees_Amount' => $result->transaction->paypal['transactionFeeAmount'],
+                'Fees_Amount' => $result->transaction->paypal['transactionFeeAmount'] ?? 0,
                 'Currency' => $result->transaction->currencyIsoCode,
                 'Transaction_Date' => $result->transaction->createdAt->format('Y-m-d h:m:s'),
                 'Transaction_Key' => $result->transaction->id,

@@ -8,11 +8,11 @@ jQuery(function ($) {
     braintree.dropin.create({
         authorization: braintreeToken,
         selector: "#dropin-container",
-        paymentOptionPriority: ['paypal'],
+        // paymentOptionPriority: ['paypal'],
         paypal: {
             flow: 'checkout',
             amount: $('#cartTotal').text(),
-            currency: 'AUD'//$('select[name=Country]').val() === 'Australia' ? 'AUD' : 'USD'
+            currency: 'AUD'//$('select[name=Country]').val() === 'AU' ? 'AUD' : 'USD'
         },
     }, function (createErr, instance) {
         if (createErr) {
