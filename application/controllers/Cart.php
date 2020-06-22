@@ -35,6 +35,9 @@ class Cart extends CI_Controller
 
     public function get()
     {
+        if (!$this->session->has_userdata('cart')) {
+            $this->update([], 'Price_USD');
+        }
         echo "<div class='ph-m'>";
         foreach ($this->session->cart['assessments'] as $assessment) {
             echo

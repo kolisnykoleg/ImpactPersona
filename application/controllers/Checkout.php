@@ -4,9 +4,6 @@ class Checkout extends CI_Controller
 {
     public function index()
     {
-        if (!$this->session->has_userdata('cart')) {
-            $this->cart_update([], 'Price_USD');
-        }
         $data['countries'] = $this->location->get_countries();
         $data['australian_states'] = $this->location->get_australian_states();
         $data['token'] = $this->transaction->token();
