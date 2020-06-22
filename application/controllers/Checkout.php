@@ -9,7 +9,6 @@ class Checkout extends CI_Controller
         }
         $data['countries'] = $this->location->get_countries();
         $data['australian_states'] = $this->location->get_australian_states();
-        $data['assessments'] = $this->assessment->get_all_active();
         $data['token'] = $this->transaction->token();
 
         $this->load->view('header');
@@ -83,93 +82,4 @@ class Checkout extends CI_Controller
         $this->load->view('transaction_failed');
         $this->load->view('footer');
     }
-
-    private function cart_update($assessments, $currency)
-    {
-        $assessments = array_map(function ($assessment) use ($currency) {
-            if (!isset($assessment->Price)) {
-                $assessment->Price = $assessment->{$currency};
-                unset(
-                    $assessment->Price_AUD,
-                    $assessment->Price_USD
-                );
-            }
-            return $assessment;
-        }, $assessments);
-
-        $total = $this->cart_total($assessments);
-
-        $this->session->set_userdata('cart', [
-            'assessments' => $assessments,
-            'total' => $total,
-        ]);
-    }
-
-    private function cart_total($assessments)
-    {
-        $sum = array_reduce($assessments, function ($total, $assessment) {
-            return $total + $assessment->Price;
-        }, 0);
-        return is_float($sum)
-            ? number_format($sum, 2)
-            : $sum;
-    }
-
-    public function cart()
-    {
-        echo "<div class='ph-m'>";
-        foreach ($this->session->cart['assessments'] as $assessment) {
-            echo
-            "<div class='Cart-item pb-s'>
-                <h3 class='g'><span>$assessment->Name</span><button data-id='$assessment->ID' class='cart-delete'>Delete</button><span class='Cart-itemPrice'>$assessment->Price</span></h3>
-                <p>$assessment->Description_Short</p>
-            </div>";
-        }
-        $total = $this->session->cart['total'];
-        echo "</div><div class='Cart-summary pv-xs ph-m'>Sub total: <b>$<span id='cartTotal'>$total</span></b></div>";
-    }
-
-    public function cart_delete()
-    {
-        $id = $this->input->post('id');
-        $assessments = $this->session->cart['assessments'];
-        foreach ($assessments as $i => $assessment) {
-            if ($assessment->ID == $id) {
-                unset($assessments[$i]);
-                break;
-            }
-        }
-        $assessments = array_values($assessments);
-
-        $total = $this->cart_total($assessments);
-
-        $this->session->set_userdata('cart', [
-            'assessments' => $assessments,
-            'total' => $total,
-        ]);
-    }
-
-    public function cart_currency()
-    {
-        $currency = $this->input->post('country') == 'AU'
-            ? 'Price_AUD'
-            : 'Price_USD';
-
-        $this->cart_update($this->session->cart['assessments'], $currency);
-    }
-
-    public function cart_add()
-    {
-        $success = false;
-        $product = $this->input->post('product');
-
-        $assessment = $this->assessment->get_by_url($product);
-        if (isset($assessment) && $assessment->Active_Status) {
-            $this->cart_update([$assessment], 'Price_USD');
-            $success = true;
-        }
-
-        echo json_encode(['success' => $success]);
-    }
-
 }

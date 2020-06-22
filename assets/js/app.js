@@ -8,11 +8,11 @@ jQuery(function ($) {
     braintree.dropin.create({
         authorization: braintreeToken,
         selector: "#dropin-container",
-        // paymentOptionPriority: ['paypal'],
+        paymentOptionPriority: ['paypal'],
         paypal: {
             flow: 'checkout',
             amount: $('#cartTotal').text(),
-            currency: 'AUD'//$('select[name=Country]').val() === 'AU' ? 'AUD' : 'USD'
+            currency: $('select[name=Country]').val() === 'AU' ? 'AUD' : 'USD'
         },
     }, function (createErr, instance) {
         if (createErr) {
@@ -135,3 +135,42 @@ jQuery(function ($) {
         });
     }
 });
+
+$(function () {
+    renderCart();
+
+    $('select[name=Country], select[name=australian_state], select[name=australian_suburb]').select2();
+
+    $('select[name=Country]').change(function () {
+        if (this.value === 'AU') {
+            $('#australianLocation').slideDown();
+            $('#otherLocation').hide();
+        } else {
+            $('#otherLocation').slideDown();
+            $('#australianLocation').hide();
+        }
+
+        $.post('/cart/currency', {country: this.value}, renderCart);
+    });
+
+    $('select[name=australian_state]').change(function () {
+        $.post('/locations/get-australian-suburbs', {state_id: this.value}, function (options) {
+            $('select[name=australian_suburb]')
+            .html(options)
+            .select2();
+        });
+    });
+
+    $(document).on('click', '.cart-delete', function () {
+        let id = $(this).data('id');
+        let country = $('select[name=Country]').val();
+        $.post('/cart/delete', {id, country}, renderCart);
+    });
+
+});
+
+function renderCart() {
+    $.post('/cart/get', function(html) {
+        $('#cart').html(html);
+    });
+}
