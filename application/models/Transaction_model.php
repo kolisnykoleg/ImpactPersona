@@ -51,17 +51,9 @@ class Transaction_model extends CI_Model
 
     public function send_email($customer_id, $transaction_key)
     {
-        $result = $this->db
-            ->select('a.Name, a.URL')
-            ->from('Transactions as t')
-            ->join('AssessmentsToTransactions as at', 'at.Transaction_ID = t.ID')
-            ->join('DISCAssessments as a', 'a.ID = at.Assessment_ID')
-            ->where('t.Transaction_Key', $transaction_key)
-            ->get();
-
         $message = '';
-        while ($row = $result->unbuffered_row()) {
-            $message .= $row->Name . ' ' . base_url('survey/' . $row->URL . '/' . $transaction_key) . "\n";
+        foreach ($this->session->cart['assessments'] as $assessment) {
+            $message .= $assessment->Name . ' ' . base_url('survey/' . $assessment->URL . '/' . $transaction_key) . "\n";
         }
 
         $customer = $this->customer->get_by_id($customer_id);
