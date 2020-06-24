@@ -12,7 +12,7 @@ jQuery(function ($) {
         paypal: {
             flow: 'checkout',
             amount: $('#cartTotal').text(),
-            currency: $('select[name=Country]').val() === 'AU' ? 'AUD' : 'USD'
+            currency: 'AUD'
         },
     }, function (createErr, instance) {
         if (createErr) {

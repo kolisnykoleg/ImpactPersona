@@ -20,11 +20,10 @@ class Checkout extends CI_Controller
 
             $nonce = $this->input->post('nonce');
             $amount = $this->session->cart['total'];
-            $currency = 'AUD';
             $product_ids = array_map(function ($assessment) {
                 return $assessment->ID;
             }, $this->session->cart['assessments']);
-            $transaction_key = $this->transaction->sale($nonce, $amount, $currency, $customer_id, $product_ids);
+            $transaction_key = $this->transaction->sale($nonce, $amount, $customer_id, $product_ids);
 
             $this->transaction->send_email($customer_id, $transaction_key);
 

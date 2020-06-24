@@ -2,7 +2,7 @@
 
 class Transaction_model extends CI_Model
 {
-    public function sale($nonce, $amount, $currency, $customer_id, $product_ids)
+    public function sale($nonce, $amount, $customer_id, $product_ids)
     {
         $gateway = new Braintree\Gateway($this->config->item('braintree'));
 
