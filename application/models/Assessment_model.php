@@ -56,7 +56,8 @@ class Assessment_model extends CI_Model
             ->join('Transactions as t', 't.ID = at.Transaction_ID')
             ->where([
                 'a.URL' => $url,
-                't.Transaction_Key' => $transaction_key
+                't.Transaction_Key' => $transaction_key,
+                'at.Questionnaire_Status IS NULL' => NULL,
             ])
             ->get()
             ->row();
