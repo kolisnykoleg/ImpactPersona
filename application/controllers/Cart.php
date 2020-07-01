@@ -81,6 +81,9 @@ class Cart extends CI_Controller
 
     public function add($url = null)
     {
+        if (!$this->session->has_userdata('cart')) {
+            $this->update([], 'Price_USD');
+        }
         $assessment = $this->assessment->get_by_url($url);
         if (isset($assessment) && $assessment->Active_Status) {
             $this->update(array_merge($this->session->cart['assessments'], [$assessment]), 'Price_USD');
