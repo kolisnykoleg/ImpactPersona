@@ -58,3 +58,10 @@ $route['transaction-failed'] = 'checkout/failed';
 
 $route['questionnaire-completed'] = 'survey/completed';
 $route['survey/(:any)/(:any)'] = 'survey/index/$1/$2';
+
+require_once BASEPATH . '/database/DB.php';
+$db = &DB();
+$assessments = $db->select('URL')->get('DISCAssessments');
+while ($assessment = $assessments->unbuffered_row()) {
+    $route[$assessment->URL] = 'cart/add/' . $assessment->URL;
+}
