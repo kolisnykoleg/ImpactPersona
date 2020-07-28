@@ -35,6 +35,37 @@ class Checkout extends CI_Controller
         }
     }
 
+    public function manually_purchase()
+    {
+        $customer_id = $this->add_customer();
+        $transaction_key = uniqid('manually_');
+        $product_id = $this->input->post('Questionnaire');
+        $price = $this->input->post('Price');
+        $assessments = $this->db
+            ->get_where('DISCAssessments', ['ID' => $product_id])
+            ->result();
+        $this->session->set_userdata('cart', [
+            'assessments' => $assessments,
+            'total' => $price,
+        ]);
+
+        $this->transaction->save([
+            'Customer_ID' => $customer_id,
+            'Sales_Amount' => $price,
+            'Fees_Amount' => 0,
+            'Currency' => 'AUD',
+            'Transaction_Date' => date('Y-m-d h:m:s'),
+            'Transaction_Key' => $transaction_key,
+        ], [$product_id]);
+
+        $this->transaction->send_email($customer_id, $transaction_key);
+
+        $this->session->set_userdata('transaction_key', $transaction_key);
+        $this->session->set_userdata('customer_id', $customer_id);
+        $this->session->unset_userdata('cart');
+        redirect('/transaction-complete');
+    }
+
     private function add_customer()
     {
         $firstname = $this->input->post('Firstname', true);
@@ -76,6 +107,19 @@ class Checkout extends CI_Controller
     {
         $this->load->view('header');
         $this->load->view('transaction_failed');
+        $this->load->view('footer');
+    }
+
+    public function manually()
+    {
+        $data['countries'] = $this->location->get_countries();
+        $data['australian_states'] = $this->location->get_australian_states();
+        $data['token'] = $this->transaction->token();
+        $data['manually'] = true;
+        $data['assessments'] = $this->assessment->get_all_active();
+
+        $this->load->view('header');
+        $this->load->view('checkout', $data);
         $this->load->view('footer');
     }
 }

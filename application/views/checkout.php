@@ -1,3 +1,6 @@
+<?php
+$not_manually = !isset($manually);
+?>
 <div class="Page g g--dirCol">
     <div class="Page-fixed pv-s g-b fbAuto">
         <div class="c"><img src="/assets/img/logo.png"></div>
@@ -5,6 +8,7 @@
     <div class="Page-content bg-g95 pv-xl g-b g-b--w1 fbAuto">
         <div class="c">
             <div class="g g--wrap g--gutterM">
+                <?php if ($not_manually): ?>
                 <div class="Page-contentCart g-b g-b--order1@l fb1/1 fb1/2@l">
                     <div class="Cart">
                         <div class="Cart-content pt-m">
@@ -22,8 +26,9 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
                 <div class="Page-contentCheckout g-b fb1/1 fb1/2@l">
-                    <form class="Checkout" method="post" action="/checkout/purchase" novalidate>
+                    <form class="Checkout" method="post" action="/checkout/<?php echo $not_manually ? 'purchase' : 'manually-purchase'; ?>" novalidate>
                         <div class="Checkout-block mb-xl">
                             <h2 class="mb-m">Billing details</h2>
                             <div class="Field Field--group">
@@ -104,8 +109,25 @@
                             </div>
                         </div>
                         <div class="Checkout-block">
-                            <h2 class="mb-xxs">Payment method</h2>
-                            <div id="dropin-container"></div>
+                            <?php if ($not_manually): ?>
+                                <h2 class="mb-xxs">Payment method</h2>
+                                <div id="dropin-container"></div>
+                            <?php else: ?>
+                                <div class="Field Field--typeSelect">
+                                    <label><span class="Field-label">Questionnaire</span>
+                                        <select name="Questionnaire" data-placeholder="Select questionnaire" data-minimum-results-for-search="-1">
+                                            <?php foreach ($assessments as $assessment): ?>
+                                                <option value="<?= $assessment->ID ?>"><?= $assessment->Name ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="Field Field--typeTextfield">
+                                    <label><span class="Field-label">Price</span>
+                                        <input type="text" name="Price" placeholder="Enter price" required>
+                                    </label>
+                                </div>
+                            <?php endif; ?>
                             <div class="mt-m">
                                 <button class="Btn" id="submit-button">Purchase</button>
                             </div>

@@ -139,7 +139,7 @@ jQuery(function ($) {
 $(function () {
     renderCart();
 
-    $('select[name=Country], select[name=australian_state], select[name=australian_suburb]').select2();
+    $('select[name=Country], select[name=australian_state], select[name=australian_suburb], select[name=Questionnaire]').select2();
 
     $('select[name=Country]').change(function () {
         if (this.value === 'AU') {
@@ -164,7 +164,9 @@ $(function () {
     $(document).on('click', '.cart-delete', function () {
         let id = $(this).data('id');
         let country = $('select[name=Country]').val();
-        $.post('/cart/delete', {id, country}, renderCart);
+        $.post('/cart/delete', {id, country}, () => {
+            location.reload();
+        });
     });
 
 });

@@ -51,10 +51,10 @@ class Transaction_model extends CI_Model
 
     public function send_email($customer_id, $transaction_key)
     {
-        $message = '';
-        foreach ($this->session->cart['assessments'] as $assessment) {
-            $message .= $assessment->Name . ' ' . base_url('survey/' . $assessment->URL . '/' . $transaction_key) . "\n";
-        }
+        $message = $this->load->view('email_template', [
+            'assessments' => $this->session->cart['assessments'],
+            'transaction_key' => $transaction_key,
+        ], true);
 
         $customer = $this->customer->get_by_id($customer_id);
 
@@ -63,6 +63,7 @@ class Transaction_model extends CI_Model
             ->to($customer->Email)
             ->subject('DISC Test')
             ->message($message)
+            ->set_mailtype('html')
             ->send();
     }
 }
