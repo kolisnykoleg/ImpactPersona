@@ -38,7 +38,7 @@ class Checkout extends CI_Controller
     public function manually_purchase()
     {
         $customer_id = $this->add_customer();
-        $transaction_key = uniqid('manually_');
+        $transaction_key = uniqid();
         $product_id = $this->input->post('Questionnaire');
         $price = $this->input->post('Price');
         $assessments = $this->db
