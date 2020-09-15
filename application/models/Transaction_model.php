@@ -1,4 +1,5 @@
 <?php
+use Dompdf\Dompdf;
 
 class Transaction_model extends CI_Model
 {
@@ -51,19 +52,43 @@ class Transaction_model extends CI_Model
 
     public function send_email($customer_id, $transaction_key)
     {
-        $message = $this->load->view('email_template', [
+        $customer = $this->customer->get_by_id($customer_id);
+
+        $html = $this->load->view('invoice', [
+            'name' => $customer->Firstname . ' ' . $customer->Surname,
             'assessments' => $this->session->cart['assessments'],
-            'transaction_key' => $transaction_key,
+            'total' => $this->session->cart['total'],
+            'transaction_key' => strtoupper($transaction_key),
+            'date' => date('j F Y'),
         ], true);
 
-        $customer = $this->customer->get_by_id($customer_id);
+        // reference the Dompdf namespace
+        $dompdf = new Dompdf();
+
+        // instantiate and use the dompdf class
+        $options = $dompdf->getOptions();
+        $options->setIsRemoteEnabled('true');
+        $dompdf->setoptions($options);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $filename = FCPATH . 'invoice.pdf';
+        file_put_contents($filename, $dompdf->output());
 
         $this->email
             ->from($this->email->smtp_user, 'ImpactPersona')
             ->to($customer->Email)
             ->subject('DISC Test')
-            ->message($message)
+            ->attach($filename)
             ->set_mailtype('html')
             ->send();
+
+        unlink($filename);
     }
 }
