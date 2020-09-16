@@ -47,4 +47,14 @@ class Location_model extends CI_Model
             ->get('Countries')
             ->result();
     }
+
+    public function get_country_by_code($code)
+    {
+        return $this->db
+            ->select('Name')
+            ->where('Code', $code)
+            ->get('Countries')
+            ->row()
+            ->Name;
+    }
 }

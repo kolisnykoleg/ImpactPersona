@@ -12,9 +12,10 @@
                     </svg>
                 </div>
                 <h1 class="mb-m">Transaction Complete!</h1>
-                <p><b>Thanks, <?= $customer_name ?>!</b></p>
-                <p>Receipt number: <?= $receipt_number ?></p>
-                <p>The questionnaire link will be emailed to you.</p>
+                <p><b>Thank you, <?= $customer_name ?>!</b></p>
+                <p>Please make note of your receipt number: <?= $receipt_number ?></p>
+                <p>A unique link to your DISC Questionnaire will be emailed to you shortly. If you don't receive the email within the next few minutes, please check your <b>Junk</b> or <b>SPAM</b> folders. You can complete the questionnaire anytime you like, and it will take approximately ten minutes to finish.</p>
+		<p>The results will then be processed by our team, and your DISC report emailed to you within two business days.</p>
             </div>
         </div>
     </div>

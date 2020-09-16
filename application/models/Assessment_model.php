@@ -40,8 +40,9 @@ class Assessment_model extends CI_Model
     public function send_results($results)
     {
         $this->email
-            ->from($this->email->smtp_user, 'ImpactPersona')
-            ->to('scott.holland@rgbsolutions.com.au')
+            ->from($this->email->smtp_user, 'Impact Persona Results')
+            ->to('charissa@impactpersona.com.au')
+	    ->bcc('scott.holland@beeconnected.com.au')
             ->subject('DISC Test Results')
             ->message($results)
             ->send();

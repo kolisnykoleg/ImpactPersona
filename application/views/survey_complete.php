@@ -11,9 +11,9 @@
                         <path d="M378.3 173.9a15 15 0 00-21.2 0L224.6 306.3 155 236.6a15 15 0 00-21.2 21.2l80.3 80.3a15 15 0 0021.2 0l143.1-143a15 15 0 000-21.2z"></path>
                     </svg>
                 </div>
-                <h1 class="mb-m">Questionnaire Completed!</h1>
-                <p><b>Thanks, <?= $customer_name ?>!</b></p>
-                <p>Check your email, shortly you will receive results</p>
+                <h1 class="mb-m">DISC Questionnaire Completed!</h1>
+                <p><b>Well done, <?= $customer_name ?>! You've completed the Impact Persona DISC Profile</b></p>
+                <p>Within the next two business days, we'll review your answers and prepare your personal DISC profile which will then be emailed to you.</p>
             </div>
         </div>
     </div>

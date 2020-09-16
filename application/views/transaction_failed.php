@@ -12,11 +12,11 @@
                     </svg>
                 </div>
                 <h1 class="mb-m">Transaction Failed!</h1>
-                <p><b>Sorry!</b></p>
-                <p>Something went wrong</p>
-                <p>If you're ready and have a...</p>
+                <p><b>Oops!</b></p>
+                <p>Something went wrong. If you're unable to complete your purchase, please try again. Otherwise, reach out to us at: <a href="mailto:support@impactpersona.com.au">support@impactpersona.com.au</a></p>
+                <!--<p>If you're ready and have a...</p>-->
             </div>
-            <div class="Page-actions"><a class="Btn" href="/checkout">Try again</a></div>
+            <div class="Page-actions"><a class="Btn" href="/checkout">Click here to try again...</a></div>
         </div>
     </div>
 </div>

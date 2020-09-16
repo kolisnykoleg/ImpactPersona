@@ -52,7 +52,13 @@ class Transaction_model extends CI_Model
 
     public function send_email($customer_id, $transaction_key)
     {
+        $message = $this->load->view('email_template', [
+            'assessments' => $this->session->cart['assessments'],
+            'transaction_key' => $transaction_key,
+        ], true);
+
         $customer = $this->customer->get_by_id($customer_id);
+        $address = $customer->State . ', ' . $this->location->get_country_by_code($customer->Country);
 
         $html = $this->load->view('invoice', [
             'name' => $customer->Firstname . ' ' . $customer->Surname,
@@ -60,6 +66,7 @@ class Transaction_model extends CI_Model
             'total' => $this->session->cart['total'],
             'transaction_key' => strtoupper($transaction_key),
             'date' => date('j F Y'),
+            'address' => $address,
         ], true);
 
         // reference the Dompdf namespace
@@ -78,14 +85,16 @@ class Transaction_model extends CI_Model
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $filename = FCPATH . 'invoice.pdf';
+        $filename = FCPATH . 'Receipt.pdf';
         file_put_contents($filename, $dompdf->output());
 
         $this->email
-            ->from($this->email->smtp_user, 'ImpactPersona')
+            ->from($this->email->smtp_user, 'Impact Persona')
             ->to($customer->Email)
-            ->subject('DISC Test')
-            ->attach($filename)
+	    ->bcc('charissa@impactpersona.com.au')
+            ->subject('Start your DISC Assessment')
+            ->message($message)
+	    ->attach($filename)
             ->set_mailtype('html')
             ->send();
 

@@ -21,8 +21,10 @@ $not_manually = !isset($manually);
                             <div id="cart"></div>
                         </div>
                         <div class="Cart-helper mt-xs">
+<!--
                             <p>Need help with your order?</p>
                             <p>Hotline: <b><a href="tel: +31 333 0140">+31 333 0140</a></b> (international)</p>
+-->
                         </div>
                     </div>
                 </div>

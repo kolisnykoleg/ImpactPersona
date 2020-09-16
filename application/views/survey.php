@@ -26,8 +26,8 @@
 
                         </div>
                         <div class="Info-colRight g-b">
-                            <p>Each box below contains four phrases. Read each phrase carefylly and think how accurately each phrase describes you. From the four choices, click one that is "Most Like Me", and one that is "Least Like Me".</p>
-                            <p>You should answer spontaneously and honestly in the context of a work enviroment. This assessment should ideally be completed within <b>EIGHT MINUTES</b>, or as close to that as possible.</p>
+                            <p>Each box below contains four phrases. Read each phrase carefully and think how accurately each phrase describes you. From the four choices, click one that is <b>"Most Like Me"</b> <b>AND</b> one that is <b>"Least Like Me"</b>. This means each column will have one response.</p>
+                            <p>You should answer spontaneously and honestly in the context of a work enviroment. This assessment should ideally be completed within <b>TEN MINUTES</b>, or as close to that as possible.</p>
                             <p>There are no right or wrong answers.</p>
                         </div>
                     </div>

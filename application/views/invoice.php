@@ -193,8 +193,8 @@
     <tr>
         <th>To:</th>
         <td>
-            <p><?= $name ?> – Company</p>
-            <p>Eagleby, QLD, 4207</p>
+            <p><?= $name ?></p>
+            <p><?= $address ?></p>
         </td>
     </tr>
     <tr>
@@ -258,3 +258,4 @@
 </table>
 </body>
 </html>
+
