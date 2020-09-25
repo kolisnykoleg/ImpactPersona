@@ -44,6 +44,9 @@ class Checkout extends CI_Controller
         $assessments = $this->db
             ->get_where('DISCAssessments', ['ID' => $product_id])
             ->result();
+        array_walk($assessments, function ($assessment) use ($price) {
+            $assessment->Price = $price;
+        });
         $this->session->set_userdata('cart', [
             'assessments' => $assessments,
             'total' => $price,
