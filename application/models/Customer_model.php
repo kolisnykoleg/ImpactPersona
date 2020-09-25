@@ -11,10 +11,27 @@ class Customer_model extends CI_Model
         }
     }
 
+    public function create_end_user($data)
+    {
+        if ($this->db->insert('EndUsers', $data)) {
+            return $this->db->insert_id();
+        } else {
+            throw new Exception($this->db->error()['message']);
+        }
+    }
+
+
     public function get_by_id($customer_id)
     {
         return $this->db
             ->get_where('Customers', ['id' => $customer_id])
+            ->row();
+    }
+
+    public function get_end_user_by_id($id)
+    {
+        return $this->db
+            ->get_where('EndUsers', ['ID' => $id])
             ->row();
     }
 

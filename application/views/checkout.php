@@ -109,6 +109,43 @@ $not_manually = !isset($manually);
                                     </div>
                                 </div>
                             </div>
+                            <div class="Field mt-m">
+                                <h2 class="mb-xxs">Report Details</h2>
+                                <input type="checkbox" name="report_details" id="report_details" checked>
+                                <label for="report_details">The name on the report and email address it will be sent to are the same as the billing
+                                    details.</label>
+                            </div>
+                            <div class="Field" id="report_data">
+                                <div class="Field">
+                                    <div class="mt-0 g g--wrap g--gutterS">
+                                        <div class="pt-0 g-b fb1/1 fb1/2@l">
+                                            <div class="Field Field--typeTextfield">
+                                                <label><span class="Field-label">First name</span>
+                                                    <input type="text" name="report_firstname">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="pt-0 g-b fb1/1 fb1/2@l">
+                                            <div class="Field Field--typeTextfield">
+                                                <label><span class="Field-label">Last name</span>
+                                                    <input type="text" name="report_surname">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="Field Field--typeTextfield">
+                                    <label><span class="Field-label">Email address</span>
+                                        <input type="email" name="report_email">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="Field">
+                                <input type="checkbox" name="terms_conditions" id="terms_conditions" required>
+                                <label for="terms_conditions">I Agree to the <a
+                                        href="https://www.impactpersona.com.au/terms-conditions-and-privacy-policy" target="_blank">Terms, Conditions
+                                        and Privacy Statement</a> of Impact Persona</label>
+                            </div>
                         </div>
                         <div class="Checkout-block">
                             <?php if ($not_manually): ?>

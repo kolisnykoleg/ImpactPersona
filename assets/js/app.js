@@ -169,6 +169,14 @@ $(function () {
         });
     });
 
+    $('#report_details').change(function () {
+        if ($(this).prop('checked')) {
+            $('#report_data').slideUp();
+        } else {
+            $('#report_data').slideDown();
+        }
+    });
+
 });
 
 function renderCart() {

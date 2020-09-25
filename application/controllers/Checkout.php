@@ -25,7 +25,22 @@ class Checkout extends CI_Controller
             }, $this->session->cart['assessments']);
             $transaction_key = $this->transaction->sale($nonce, $amount, $customer_id, $product_ids);
 
-            $this->transaction->send_email($customer_id, $transaction_key);
+            if ($this->input->post('report_details')) {
+                $this->transaction->send_email($customer_id, $transaction_key);
+            } else {
+                $transaction_id = $this->transaction->get_by_key($transaction_key)->ID;
+                $firstname = $this->input->post('report_firstname', true);
+                $surname = $this->input->post('report_surname', true);
+                $email = $this->input->post('report_email', true);
+                $end_user_id = $this->customer->create_end_user([
+                    'Transaction_ID' => $transaction_id,
+                    'Firstname' => $firstname,
+                    'Surname' => $surname,
+                    'Email' => $email,
+                ]);
+
+                $this->transaction->send_emails_to_end_user($customer_id, $end_user_id, $transaction_key);
+            }
 
             $this->session->set_userdata('transaction_key', $transaction_key);
             $this->session->set_userdata('customer_id', $customer_id);
@@ -61,7 +76,22 @@ class Checkout extends CI_Controller
             'Transaction_Key' => $transaction_key,
         ], [$product_id]);
 
-        $this->transaction->send_email($customer_id, $transaction_key);
+        if ($this->input->post('report_details')) {
+            $this->transaction->send_email($customer_id, $transaction_key);
+        } else {
+            $transaction_id = $this->transaction->get_by_key($transaction_key)->ID;
+            $firstname = $this->input->post('report_firstname', true);
+            $surname = $this->input->post('report_surname', true);
+            $email = $this->input->post('report_email', true);
+            $end_user_id = $this->customer->create_end_user([
+                'Transaction_ID' => $transaction_id,
+                'Firstname' => $firstname,
+                'Surname' => $surname,
+                'Email' => $email,
+            ]);
+
+            $this->transaction->send_emails_to_end_user($customer_id, $end_user_id, $transaction_key);
+        }
 
         $this->session->set_userdata('transaction_key', $transaction_key);
         $this->session->set_userdata('customer_id', $customer_id);
