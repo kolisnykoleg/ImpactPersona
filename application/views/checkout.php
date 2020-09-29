@@ -111,7 +111,7 @@ $not_manually = !isset($manually);
                             </div>
                             <div class="Field mt-m">
                                 <h2 class="mb-xxs">Report Details</h2>
-                                <input type="checkbox" name="report_details" id="report_details" checked>
+                                <input type="checkbox" name="report_details" id="report_details">
                                 <label for="report_details">The name on the report and email address it will be sent to are the same as the billing
                                     details.</label>
                             </div>
