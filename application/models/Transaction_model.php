@@ -108,7 +108,7 @@ class Transaction_model extends CI_Model
 
         $end_user = $this->customer->get_end_user_by_id($end_user_id);
 
-        $message = $this->load->view('email_template', [
+        $message = $this->load->view('email_receipt_template', [
             'assessments' => $this->session->cart['assessments'],
             'transaction_key' => $transaction_key,
         ], true);
