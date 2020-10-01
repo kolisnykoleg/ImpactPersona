@@ -52,49 +52,32 @@ class Transaction_model extends CI_Model
 
     public function send_email($customer_id, $transaction_key)
     {
+        $customer = $this->customer->get_by_id($customer_id);
+        $address = $customer->State . ', ' . $this->location->get_country_by_code($customer->Country);
+
+        $filename = $this->create_receipt_pdf(
+            $this->load->view('invoice', [
+                'name' => $customer->Firstname . ' ' . $customer->Surname,
+                'assessments' => $this->session->cart['assessments'],
+                'total' => $this->session->cart['total'],
+                'transaction_key' => strtoupper($transaction_key),
+                'date' => date('j F Y'),
+                'address' => $address,
+            ], true)
+        );
+
         $message = $this->load->view('email_template', [
             'assessments' => $this->session->cart['assessments'],
             'transaction_key' => $transaction_key,
         ], true);
 
-        $customer = $this->customer->get_by_id($customer_id);
-        $address = $customer->State . ', ' . $this->location->get_country_by_code($customer->Country);
-
-        $html = $this->load->view('invoice', [
-            'name' => $customer->Firstname . ' ' . $customer->Surname,
-            'assessments' => $this->session->cart['assessments'],
-            'total' => $this->session->cart['total'],
-            'transaction_key' => strtoupper($transaction_key),
-            'date' => date('j F Y'),
-            'address' => $address,
-        ], true);
-
-        // reference the Dompdf namespace
-        $dompdf = new Dompdf();
-
-        // instantiate and use the dompdf class
-        $options = $dompdf->getOptions();
-        $options->setIsRemoteEnabled('true');
-        $dompdf->setoptions($options);
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        $filename = FCPATH . 'Receipt.pdf';
-        file_put_contents($filename, $dompdf->output());
-
         $this->email
             ->from($this->email->smtp_user, 'Impact Persona')
             ->to($customer->Email)
-	    ->bcc('charissa@impactpersona.com.au')
+            ->bcc('charissa@impactpersona.com.au')
             ->subject('Start your DISC Assessment')
             ->message($message)
-	    ->attach($filename)
+            ->attach($filename)
             ->set_mailtype('html')
             ->send();
 
@@ -104,58 +87,44 @@ class Transaction_model extends CI_Model
     public function send_emails_to_end_user($customer_id, $end_user_id, $transaction_key)
     {
         $customer = $this->customer->get_by_id($customer_id);
-        $address = $customer->State . ', ' . $this->location->get_country_by_code($customer->Country);
-
         $end_user = $this->customer->get_end_user_by_id($end_user_id);
 
-        $message = $this->load->view('email_receipt_template', [
-            'assessments' => $this->session->cart['assessments'],
-            'transaction_key' => $transaction_key,
-        ], true);
-
+        // to Report Details
         $this->email
             ->from($this->email->smtp_user, 'Impact Persona')
             ->to($end_user->Email)
-            ->cc($customer->Email)
             ->bcc('charissa@impactpersona.com.au')
             ->subject('Start your DISC Assessment')
-            ->message($message)
+            ->message($this->load->view('email_template', [
+                'assessments' => $this->session->cart['assessments'],
+                'transaction_key' => $transaction_key,
+            ], true))
             ->set_mailtype('html')
             ->send();
 
-        $html = $this->load->view('invoice', [
-            'name' => $end_user->Firstname . ' ' . $end_user->Surname,
-            'assessments' => $this->session->cart['assessments'],
-            'total' => $this->session->cart['total'],
-            'transaction_key' => strtoupper($transaction_key),
-            'date' => date('j F Y'),
-            'address' => $address,
-        ], true);
+        $address = $customer->State . ', ' . $this->location->get_country_by_code($customer->Country);
 
-        // reference the Dompdf namespace
-        $dompdf = new Dompdf();
+        $filename = $this->create_receipt_pdf(
+            $this->load->view('invoice', [
+                'name' => $customer->Firstname . ' ' . $customer->Surname,
+                'assessments' => $this->session->cart['assessments'],
+                'total' => $this->session->cart['total'],
+                'transaction_key' => strtoupper($transaction_key),
+                'date' => date('j F Y'),
+                'address' => $address,
+            ], true)
+        );
 
-        // instantiate and use the dompdf class
-        $options = $dompdf->getOptions();
-        $options->setIsRemoteEnabled('true');
-        $dompdf->setoptions($options);
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        $filename = FCPATH . 'Receipt.pdf';
-        file_put_contents($filename, $dompdf->output());
-
+        // to Billing Details
         $this->email
             ->from($this->email->smtp_user, 'Impact Persona')
-            ->to($end_user->Email)
+            ->to($customer->Email)
             ->bcc('charissa@impactpersona.com.au')
             ->subject('Receipt')
+            ->message($this->load->view('email_receipt_template', [
+                'assessments' => $this->session->cart['assessments'],
+                'transaction_key' => $transaction_key,
+            ], true))
             ->attach($filename)
             ->set_mailtype('html')
             ->send();
@@ -168,5 +137,29 @@ class Transaction_model extends CI_Model
         return $this->db
             ->get_where('Transactions', ['Transaction_Key' => $transaction_key])
             ->row();
+    }
+
+    public function create_receipt_pdf($html)
+    {
+        // reference the Dompdf namespace
+        $dompdf = new Dompdf();
+
+        // instantiate and use the dompdf class
+        $options = $dompdf->getOptions();
+        $options->setIsRemoteEnabled('true');
+        $dompdf->setoptions($options);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $filename = FCPATH . 'Receipt.pdf';
+        file_put_contents($filename, $dompdf->output());
+
+        return $filename;
     }
 }
