@@ -53,6 +53,11 @@ class Survey extends CI_Controller
         $this->assessment->save_survey($data);
         $this->assessment->update_questionnaire_status($assessment_id, $transaction_key, 'y');
 
+        $results_data = [
+            'results' => $this->assessment->get_assessment($customer->ID, $assessment_id),
+            'customer' => $customer,
+        ];
+
         $end_user = $this->db
             ->select('e.*')
             ->from('Customers AS c')
@@ -62,10 +67,11 @@ class Survey extends CI_Controller
             ->get()
             ->row();
 
-        $results = json_encode([
-            'results' => $this->assessment->get_assessment($customer->ID, $assessment_id),
-            'customer' => empty($end_user) ? $customer : $end_user,
-        ], JSON_PRETTY_PRINT);
+        if (!empty($end_user)) {
+            $results_data['end_user'] = $end_user;
+        }
+
+        $results = json_encode($results_data, JSON_PRETTY_PRINT);
 
         $this->assessment->send_results($results);
 
