@@ -4,14 +4,14 @@ jQuery(function ($) {
     var checkoutForm = document.querySelector(".Checkout");
     if (!checkoutForm) return; // Braintree drop-in init
 
-    setTimeout(() => {
+    $.post('/cart/get', html => {
     braintree.dropin.create({
         authorization: braintreeToken,
         selector: "#dropin-container",
         paymentOptionPriority: ['paypal'],
         paypal: {
             flow: 'checkout',
-            amount: $('#cartTotal').text(),
+            amount: $($.parseHTML(html)).find('#cartTotal').text(),
             currency: 'AUD'
         },
     }, function (createErr, instance) {
@@ -40,7 +40,7 @@ jQuery(function ($) {
             }
         });
     });
-    }, 1000);
+    });
 });
 jQuery(function ($) {
     var sliderContent = $(".Slider--survey .Slider-content");
